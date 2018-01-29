@@ -44,20 +44,13 @@ CREATE TABLE IF NOT EXISTS `cards`.`Transaction` (
   `type` CHAR(1) NOT NULL COMMENT 'P - Purchase\nD - Deposit',
   `amount` DECIMAL(10,2) NOT NULL,
   `amountCaptured` DECIMAL(10,2) NOT NULL,
-  `idCategory` INT NULL,
   `idMerchant` INT NULL,
   PRIMARY KEY (`idTransaction`),
   INDEX `fk_Transaction_Card_idx` (`idCard` ASC),
-  INDEX `fk_Transaction_Category_idx` (`idCategory` ASC),
   INDEX `fk_Transaction_Marchant_idx` (`idMerchant` ASC),
   CONSTRAINT `fk_Transaction_Card`
     FOREIGN KEY (`idCard`)
     REFERENCES `cards`.`Card` (`idCard`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Transaction_Category`
-    FOREIGN KEY (`idCategory`)
-    REFERENCES `cards`.`Category` (`idCategory`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Transaction_Marchant`
@@ -72,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `cards`.`TransactionLedger` (
   `idTransactionLedger` INT NOT NULL AUTO_INCREMENT,
   `idTransaction` INT NOT NULL,
   `createdAt` DATETIME NOT NULL,
-  `type` CHAR(1) NOT NULL COMMENT 'A - Authorization\nC - Capture\nV - Reverse\nR - Refund\nD - Deposit',
+  `type` CHAR(1) NOT NULL COMMENT 'A - Authorization\nC - Capture\nV - ReVerse\nR - Refund\nD - Deposit',
   `amount` DECIMAL(10,2) NOT NULL,
   PRIMARY KEY (`idTransactionLedger`),
   INDEX `fk_TransactionLedger_Transaction_idx` (`idTransaction` ASC),

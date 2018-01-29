@@ -51,7 +51,7 @@ const create = async (req, res) => {
 
 const deposit = async (req, res) => {
   const number = isDefinedAndNotEmpty(req.body.number) ? req.body.number : null;
-  if (number == null) {
+  if (number == null || !utils.isValidCardNumber(number)) {
     utils.returnJson(res, utils.getResultObjectErrorInvalidParameter('number'));
     return;
   }
@@ -82,7 +82,7 @@ const deposit = async (req, res) => {
 
 const balance = async (req, res) => {
   const number = isDefinedAndNotEmpty(req.body.number) ? req.body.number : null;
-  if (number == null) {
+  if (number == null || !utils.isValidCardNumber(number)) {
     utils.returnJson(res, utils.getResultObjectErrorInvalidParameter('number'));
     return;
   }
@@ -111,20 +111,8 @@ const balance = async (req, res) => {
     });
 };
 
-const notImplemented = (req, res) => {
-  utils.returnJson(
-    res,
-    utils.getResultObjectError('NotImplemented', 'Method not implemented'),
-    501,
-  );
-};
-
 module.exports = {
   create,
   deposit,
   balance,
-  authorize: notImplemented,
-  capture: notImplemented,
-  reverse: notImplemented,
-  refund: notImplemented,
 };

@@ -3,15 +3,81 @@ Credit Card POC
 
 # Installation
 
+Use `yarn install` to install all necessary packages.
+
 ## Requirements
 
 MySQL version 5.7.12+
 
 Please ensure that mysql is installed with X Protocol option enabled. If not sure - instructions to verify enabled plugins can be found [here](https://dev.mysql.com/doc/refman/5.7/en/obtaining-plugin-information.html) and instructions enable X Protocol can be found [here](https://dev.mysql.com/doc/refman/5.7/en/document-store-setting-up.html)
 
+## DB creation
 
-## CURL's
+You can use script provided in `doc/db/create.database.sql` to create a database.
 
+To create a database structure and pre-load categories you can use script `doc/db/create.database.structure.sh` or manually execute SQL scripts located in `doc/db` in following order:
+
+- schema.sql
+- data.sql
+- CardCreate.sql
+- CardDeposit.sql
+- CardGet.sql
+- CardGetByNumberAndPin.sql
+- CardGetEmpty.sql
+- CardValidate.sql
+- TransactionAuthorize.sql
+- TransactionCapture.sql
+- TransactionGet.sql
+- TransactionRefund.sql
+- TransactionReverse.sql
+- MerchantCreate.sql
+- MerchantGet.sql
+- MerchantGetEmpty.sql
+
+# Runing a server
+
+To start a server use `yarn start`.
+
+## Description
+
+Every resultset will have following format:
+```
+{
+  "meta": { "errorCode": "", "errorMessage": "", "count": 1 },
+  "data": [...]
+}
+```
+
+Where:
+- `meta` - resultset metadata
+  - `errorCode` - error code (in case of error)
+  - `errorMessage` - error message (in case of error)
+  - `count` - number of records in resultset
+- `data` - resultset data (array)
+
+# Testing
+
+Following CURL's can be used as for sample testing
+
+## Merchant registration operations
+### List merchant categories
+
+
+```
+curl -v -X GET http://localhost:3010/api/1.0/categories -H "Content-Type: application/json"
+```
+
+### Create merchant account
+
+```
+curl -v -X POST http://localhost:3010/api/1.0/merchant -H "Content-Type: application/json" -d '{"idCategory": 22, "name": "Satrbucks"}'
+```
+
+Where:
+- `idCategory` - id of a category from category list
+- `name` merchant name (will be used in transaction description)
+
+## Card operations
 ### Create a card
 
 Example:
@@ -19,7 +85,7 @@ Example:
 curl -v -X POST http://localhost:3010/api/1.0/card -H "Content-Type: application/json" -d '{"name": "James Bond"}'
 ```
 
-Sample result:
+Sample response:
 ```
 {
   "meta": { "errorCode": "", "errorMessage": "", "count": 1 },
@@ -27,12 +93,12 @@ Sample result:
     {
       "idCard": 1,
       "status": "",
-      "number": "5442921958390009",
+      "number": "5331952051035583",
       "name": "James Bond",
       "issuedDate": "2018-01-29",
       "expiryDate": "2023-01-29",
       "cvv": null,
-      "pin": "2931",
+      "pin": "0962",
       "balance": "0.00",
       "balanceBlocked": "0.00"
     }
@@ -40,20 +106,26 @@ Sample result:
 }
 ```
 
-### Deposit to a card
+Please, take a note of returned card data. It will be required later to make transactions.
+
+### Deposit to a card (load money)
 
 Example:
 ```
-curl -v -X POST http://localhost:3010/api/1.0/card/deposit -H "Content-Type: application/json" -d '{"number": "5442921958390009", "amount": 1000.10}'
+curl -v -X POST http://localhost:3010/api/1.0/card/deposit -H "Content-Type: application/json" -d '{"number": "5331952051035583", "amount": 1100.10}'
 ```
 
-Sample result:
+Where:
+- `number` - card number
+- `amount` - amount to be loaded
+
+Sample response:
 ```
 {
   "meta": { "errorCode": "", "errorMessage": "", "count": 1 },
   "data": [
     {
-      "number": "5442921958390009",
+      "number": "5331952051035583",
       "name": "James Bond",
       "issuedDate": "2018-01-29",
       "expiryDate": "2023-01-29",
@@ -70,16 +142,16 @@ Use a card number and PIN obtained while creating a card.
 
 Example:
 ```
-curl -v -X POST http://localhost:3010/api/1.0/card/balance -H "Content-Type: application/json" -d '{"number": "5442921958390009", "pin": "2931"}'
+curl -v -X POST http://localhost:3010/api/1.0/card/balance -H "Content-Type: application/json" -d '{"number": "5331952051035583", "pin": "0962"}'
 ```
 
-Sample result:
+Sample response:
 ```
 {
   "meta": { "errorCode": "", "errorMessage": "", "count": 1 },
   "data": [
     {
-      "number": "5442921958390009",
+      "number": "5331952051035583",
       "name": "James Bond",
       "issuedDate": "2018-01-29",
       "expiryDate": "2023-01-29",
@@ -91,6 +163,64 @@ Sample result:
 ```
 
 ### Get Transaction 
+
+Example:
 ```
-curl -v -X POST http://localhost:3010/api/1.0/card/transactions -H "Content-Type: application/json" -d '{"number": "5442921958390009", "pin": "2931", "start": "2018-01-01", "end": "2018-02-02"}'
+curl -v -X POST http://localhost:3010/api/1.0/transactions/list -H "Content-Type: application/json" -d '{"number": "5331952051035583", "pin": "0962", "start": "2018-01-01", "end": "2018-02-02"}'
+```
+
+Where:
+- `number` - card number
+- `pin` - PIN code
+- `start` - (optional) start date to show transactions from
+- `end` - (optional) start date to show transactions till
+
+## Merchant operations
+
+### Authorization request
+
+To authorize merchant must provide following information:
+- `number` - card number
+- `name` - card holder name
+- `expiryDate` - card expiration date
+- `cvv` - card CVV code
+- `pin` - card PIN code
+- `idMerchant` - merchant ID
+- `amount` - authorization amount
+
+```
+curl -v -X POST http://localhost:3010/api/1.0/transaction/authorize -H "Content-Type: application/json" -d '{"number": "5247591626751671", "name": "James Bond", "expiryDate": "2023-01-29", "cvv": "225", "pin": "1234", "idMerchant": 1, "amount": 22.22}'
+```
+
+### Capture transaction
+
+For capture transaction merchant needs to provide following information:
+- `idTransaction` - id of transaction created with authorization request
+- `idMerchant` - merchant ID
+- `amount` - capture amount
+
+```
+curl -v -X POST http://localhost:3010/api/1.0/transaction/capture -H "Content-Type: application/json" -d '{"idTransaction": 3, "idMerchant": 1, "amount": 50}'
+```
+
+### Reverse transaction
+
+For reverse transaction merchant needs to provide following information:
+- `idTransaction` - id of transaction created with authorization request
+- `idMerchant` - merchant ID
+- `amount` - reverse amount
+
+```
+curl -v -X POST http://localhost:3010/api/1.0/transaction/reverse -H "Content-Type: application/json" -d '{"idTransaction": 3, "idMerchant": 1, "amount": 50}'
+```
+
+### Refund transaction
+
+For refund transaction merchant needs to provide following information:
+- `idTransaction` - id of transaction created with authorization request
+- `idMerchant` - merchant ID
+- `amount` - refund amount
+
+```
+curl -v -X POST http://localhost:3010/api/1.0/transaction/refund -H "Content-Type: application/json" -d '{"idTransaction": 3, "idMerchant": 1, "amount": 50}'
 ```

@@ -127,6 +127,9 @@ const completeCardNumber = (prefix, length) => {
   return cardNumber;
 };
 
+/**
+ * Generate a credit card number
+ */
 const generateCardNumber = () => {
   const randomArrayIndex = Math.floor(Math.random() * mastercardPrefixList.length);
   const cardNumber = mastercardPrefixList[randomArrayIndex];
@@ -148,6 +151,10 @@ const luhnCheck = (val) => {
   return sum % 10 === 0;
 };
 
+/**
+ * Check if a valid credit card number
+ * @param {String} number card number
+ */
 const isValidCardNumber = (number) => {
   const regex = new RegExp('^[0-9]{16}$');
   if (!regex.test(number)) {

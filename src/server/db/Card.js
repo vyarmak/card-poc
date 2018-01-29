@@ -84,8 +84,38 @@ const getByNumberAndPin = (session, number, pin) => {
     });
 };
 
+const validate = (session, number, name, expiryDate, cvv, pin) => {
+  const rows = [];
+
+  return session
+    .executeSql(
+      'CALL `cards`.CardValidate(?, ?, ?, ?, ?)',
+      number,
+      name,
+      expiryDate,
+      cvv,
+      pin,
+    )
+    .execute((row) => {
+      rows.push(row);
+    })
+    .then(() => {
+      const result = connector.processSelectResultset(rows);
+      return result;
+    })
+    .catch((err) => {
+      const result = getResultObject();
+      result.meta.errorCode = 'InternalError';
+      result.meta.errorMessage = 'Error getting card information';
+      result.data = null;
+      logger.error('Error getting card information', err);
+      return result;
+    });
+};
+
 module.exports = {
   create,
   deposit,
   getByNumberAndPin,
+  validate,
 };

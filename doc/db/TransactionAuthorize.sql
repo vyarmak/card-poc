@@ -1,9 +1,10 @@
-DROP PROCEDURE IF EXISTS CardDeposit;
+DROP PROCEDURE IF EXISTS TransactionAuthorize;
 
 DELIMITER //
 
-CREATE PROCEDURE CardDeposit(
-  IN IN_number CHAR(16),
+CREATE PROCEDURE TransactionAuthorize(
+  IN IN_idCard INT,
+  IN IN_idMerchant INT,
   IN IN_amount DECIMAL(10,2)
 )
 LANGUAGE SQL
@@ -18,7 +19,8 @@ BEGIN
   DECLARE errMessage VARCHAR(255) DEFAULT "";
 
   DECLARE PAR_idTransaction INT;
-  DECLARE PAR_idCard INT;
+  DECLARE PAR_balance DECIMAL(10,2);
+  DECLARE PAR_merchantFound INT;
   
   DECLARE EXIT HANDLER FOR SQLEXCEPTION
   	BEGIN
@@ -34,26 +36,32 @@ BEGIN
   END;
 
   START TRANSACTION;
-    SELECT idCard INTO PAR_idCard FROM Card WHERE number = IN_number;
-    IF (PAR_idCard IS NULL) THEN
-      SELECT 'InvalidCardOrPin' INTO errCode;
+    SELECT balance INTO PAR_balance FROM Card WHERE idCard = IN_idCard;
+    SELECT idMerchant INTO PAR_merchantFound FROM Merchant WHERE idMerchant = IN_idMerchant;
+    IF (PAR_merchantFound IS NULL) THEN
+      SELECT 'InvalidMerchant' INTO errCode;
       SIGNAL SQLSTATE 'SYSER'
-        SET MESSAGE_TEXT = 'Invalid credit card or PIN';
+        SET MESSAGE_TEXT = 'Invalid merchant';
+    END IF;
+    IF (PAR_balance < IN_amount) THEN
+      SELECT 'InsuficientFunds' INTO errCode;
+      SIGNAL SQLSTATE 'SYSER'
+        SET MESSAGE_TEXT = 'Insuficient funds';
     END IF;
     INSERT INTO Transaction 
       (idCard, createdAt, type, amount, amountCaptured, idMerchant)
     VALUES
-      (PAR_idCard, NOW(), 'D', IN_amount, IN_amount, NULL);
+      (IN_idCard, NOW(), 'P', IN_amount, 0, IN_idMerchant);
   COMMIT;
   SELECT LAST_INSERT_ID() INTO PAR_idTransaction;
   START TRANSACTION;
     INSERT INTO TransactionLedger 
       (idTransactionLedger, idTransaction, createdAt, type, amount)
     VALUES
-      (NULL, PAR_idTransaction, NOW(), 'D', IN_amount);
-    UPDATE Card SET balance = balance + IN_amount WHERE idCard = PAR_idCard;
+      (NULL, PAR_idTransaction, NOW(), 'A', IN_amount);
+    UPDATE Card SET balanceBlocked = balanceBlocked + IN_amount WHERE idCard = IN_idCard;
   COMMIT;
-  CALL CardGet(PAR_idCard);
+  CALL TransactionGet(PAR_idTransaction);
 END
 //
 

@@ -6,10 +6,10 @@ class Transaction {
     type,
     amount,
     amountCaptured,
-    idCategory,
     idMerchant,
-    category,
     merchant,
+    idCategory,
+    category,
   ) {
     this.idTransaction = idTransaction;
     this.idCard = idCard;
@@ -17,10 +17,10 @@ class Transaction {
     this.type = type;
     this.amount = amount;
     this.amountCaptured = amountCaptured;
-    this.idCategory = idCategory;
     this.idMerchant = idMerchant;
-    this.category = category;
     this.merchant = merchant;
+    this.idCategory = idCategory;
+    this.category = category;
   }
 
   static fromRow(row) {

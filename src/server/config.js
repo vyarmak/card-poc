@@ -2,17 +2,20 @@ const path = require('path');
 
 const config = {};
 
+/** cypher salt */
 config.salt = 'DaskqKLDA,.xa#!!ada';
+/** default card validity years */
 config.cardValidityYears = 5;
 
+/** server port */
 config.port = process.env.PORT || 3010;
+/** application path */
 config.appPath = path.join(__dirname, '../..');
-/** upload dir */
-config.uploadDir = path.join(config.appPath, 'upload');
 /** public dir */
 config.publicDir = path.join(config.appPath, 'public');
 config.assetsDir = path.join(config.appPath, 'public/assets');
 
+/** configurations for production and development environments */
 if (process.env.NODE_ENV === 'production') {
   config.debug = process.env.DEBUG || false;
   config.fqdn = 'http://cards.yarmakconsulting.com/';
@@ -31,22 +34,13 @@ if (process.env.NODE_ENV === 'production') {
   };
 }
 
+/** database configuration */
 config.dbConfig = {
   host: '127.0.0.1',
   port: 33060,
   user: 'cards',
   password: 'cards',
   database: 'cards',
-  multipleStatements: true,
-  timezone: 'utc',
-  schema: {
-    tableName: 'Session',
-    columnNames: {
-      session_id: 'idSession',
-      expires: 'expires',
-      data: 'data',
-    },
-  },
 };
 
 if (process.env.DB_CONFIG) {

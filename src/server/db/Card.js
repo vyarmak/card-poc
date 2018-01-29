@@ -38,7 +38,7 @@ const deposit = (session, number, amount) => {
   return session
     .executeSql(
       'CALL `cards`.CardDeposit(?, ?)',
-      number,
+      `${number}`,
       `${amount}`,
     )
     .execute((row) => {
@@ -58,7 +58,36 @@ const deposit = (session, number, amount) => {
     });
 };
 
+const getByNumberAndPin = (session, number, pin) => {
+  const rows = [];
+
+  console.log('pin', pin);
+
+  return session
+    .executeSql(
+      'CALL `cards`.CardGetByNumberAndPin(?, ?)',
+      number,
+      pin,
+    )
+    .execute((row) => {
+      rows.push(row);
+    })
+    .then(() => {
+      const result = connector.processSelectResultset(rows);
+      return result;
+    })
+    .catch((err) => {
+      const result = getResultObject();
+      result.meta.errorCode = 'InternalError';
+      result.meta.errorMessage = 'Error getting card information';
+      result.data = null;
+      logger.error('Error getting card information', err);
+      return result;
+    });
+};
+
 module.exports = {
   create,
   deposit,
+  getByNumberAndPin,
 };

@@ -1,8 +1,11 @@
-DROP PROCEDURE IF EXISTS CardGetByNumber;
+DROP PROCEDURE IF EXISTS CardGetByNumberAndPin;
 
 DELIMITER //
 
-CREATE PROCEDURE CardGetByNumber(IN_number INT)
+CREATE PROCEDURE CardGetByNumberAndPin(
+  IN IN_number CHAR(16),
+  IN IN_pin CHAR(64)
+)
 LANGUAGE SQL
 NOT DETERMINISTIC
 CONTAINS SQL
@@ -21,13 +24,13 @@ BEGIN
     Card.name,
     Card.issuedDate,
     Card.expiryDate,
-    Card.cvv,
+    NULL AS cvv,
     NULL AS pin,
     Card.balance,
     Card.balanceBlocked
   FROM Card 
   WHERE 
-    Card.number = IN_number;
+    Card.number = IN_number AND Card.pin = IN_pin;
 
   SELECT totalRecords, errCode, errMessage;
 END

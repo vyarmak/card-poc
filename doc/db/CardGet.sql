@@ -2,7 +2,7 @@ DROP PROCEDURE IF EXISTS CardGet;
 
 DELIMITER //
 
-CREATE PROCEDURE CardGet(IN_idCard INT)
+CREATE PROCEDURE CardGet(IN IN_idCard INT)
 LANGUAGE SQL
 NOT DETERMINISTIC
 CONTAINS SQL
@@ -21,7 +21,7 @@ BEGIN
     Card.name,
     Card.issuedDate,
     Card.expiryDate,
-    Card.cvv,
+    NULL AS cvv,
     NULL AS pin,
     Card.balance,
     Card.balanceBlocked

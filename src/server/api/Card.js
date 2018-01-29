@@ -19,6 +19,7 @@ const create = async (req, res) => {
 
   // generate PIN
   const pin = utils.generatePIN();
+  const cvv = utils.generateCVV();
   const session = await connector.getSession();
 
   db
@@ -28,7 +29,7 @@ const create = async (req, res) => {
       name,
       utils.newIssuedDate(),
       utils.newExpiryDate(),
-      utils.generateCVV(),
+      cvv,
       utils.sha256(pin),
     )
     .then((result) => {
@@ -68,7 +69,38 @@ const deposit = async (req, res) => {
       session.close();
       const data = result.data;
       const resultObject = utils.getResultObject();
-      resultObject.data = [Card.fromRow(data)];
+      resultObject.data = [Card.fromRow(data).forClient()];
+      resultObject.meta = result.meta;
+      utils.returnJson(res, resultObject);
+    })
+    .catch((error) => {
+      session.close();
+      console.log('error', error);
+      utils.returnJson(res, utils.getResultObjectError('Error', error));
+    });
+};
+
+const balance = async (req, res) => {
+  const number = isDefinedAndNotEmpty(req.body.number) ? req.body.number : null;
+  if (number == null) {
+    utils.returnJson(res, utils.getResultObjectErrorInvalidParameter('number'));
+    return;
+  }
+  const pin = isDefinedAndNotEmpty(req.body.pin) ? req.body.pin : null;
+  if (pin == null) {
+    utils.returnJson(res, utils.getResultObjectErrorInvalidParameter('pin'));
+    return;
+  }
+
+  const session = await connector.getSession();
+
+  db
+    .getByNumberAndPin(session, number, utils.sha256(pin))
+    .then((result) => {
+      session.close();
+      const data = result.data;
+      const resultObject = utils.getResultObject();
+      resultObject.data = [Card.fromRow(data).forClient()];
       resultObject.meta = result.meta;
       utils.returnJson(res, resultObject);
     })
@@ -90,7 +122,7 @@ const notImplemented = (req, res) => {
 module.exports = {
   create,
   deposit,
-  balance: notImplemented,
+  balance,
   transactions: notImplemented,
   authorize: notImplemented,
   capture: notImplemented,

@@ -42,7 +42,8 @@ app.enable('trust proxy', 1);
 app.post('/api/1.0/card', Card.create);
 // curl -v -X POST http://localhost:3010/api/1.0/card/deposit -H "Content-Type: application/json" -d '{"number": "5247591626751671", "amount": 100}'
 app.post('/api/1.0/card/deposit', Card.deposit);
-// app.get('/api/1.0/card/balance', Card.balance);
+// curl -v -X POST http://localhost:3010/api/1.0/card/balance -H "Content-Type: application/json" -d '{"number": "5247591626751671", "pin": "1234"}'
+app.post('/api/1.0/card/balance', Card.balance);
 // app.get('/api/1.0/card/transactions', Card.transactions);
 // app.post('/api/1.0/card/authorize', Card.authorize);
 // app.post('/api/1.0/card/capture', Card.capture);

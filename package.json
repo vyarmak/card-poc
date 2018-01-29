@@ -4,8 +4,8 @@
   "description": "card-poc",
   "private": true,
   "scripts": {
-    "start": "NODE_PATH=node_modules:src babel-node src/server/index.js",
-    "debug": "NODE_PATH=node_modules:src babel-node --inspect --presets es2015,stage-2 src/server/index.js",
+    "start": "NODE_PATH=node_modules:src node src/server/index.js",
+    "debug": "NODE_PATH=node_modules:src node --inspect src/server/index.js",
     "client": "webpack --progress --colors --watch",
     "clean": "rm -rf build && rm -rf public/assets/app/* && mkdir -p public/assets/app && mkdir build",
     "serve": "NODE_PATH=node_modules:build:src node build/server/index.js",

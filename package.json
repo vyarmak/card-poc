@@ -1,0 +1,188 @@
+{
+  "name": "card-poc",
+  "version": "0.0.1",
+  "description": "card-poc",
+  "private": true,
+  "scripts": {
+    "start": "NODE_PATH=node_modules:src babel-node src/server/index.js",
+    "debug": "NODE_PATH=node_modules:src babel-node --inspect --presets es2015,stage-2 src/server/index.js",
+    "client": "webpack --progress --colors --watch",
+    "clean": "rm -rf build && rm -rf public/assets/app/* && mkdir -p public/assets/app && mkdir build",
+    "serve": "NODE_PATH=node_modules:build:src node build/server/index.js",
+    "build-server": "NODE_PATH=node_modules:src babel src -d build -s",
+    "build-client": "webpack --progress --colors -p",
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vyarmak/card-poc.git"
+  },
+  "author": "Viktor Yarmak <viktor.yarmak@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/vyarmak/card-poc/issues"
+  },
+  "homepage": "https://github.com/vyarmak/card-poc#readme",
+  "dependencies": {
+    "@mysql/xdevapi": "^8.0.8",
+    "body-parser": "^1.18.2",
+    "check-tool": "^1.0.1",
+    "connect-busboy": "0.0.2",
+    "cookie-parse": "^0.4.0",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.16.0",
+    "font-awesome": "^4.7.0",
+    "i18next": "^8.4.3",
+    "i18next-express-middleware": "^1.0.6",
+    "i18next-node-fs-backend": "^1.0.0",
+    "i18next-xhr-backend": "^1.4.3",
+    "morgan": "^1.9.0",
+    "path": "^0.12.7",
+    "prop-types": "^15.6.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-i18next": "^4.8.0",
+    "react-redux": "^5.0.6",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
+    "redux": "^3.7.2",
+    "winston": "^2.3.1",
+    "winston-daily-rotate-file": "^1.7.2"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^7.2.3",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-plugin-transform-es2015-modules-strip": "^0.1.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "css-loader": "^0.28.7",
+    "eslint-config-airbnb": "^15.1.0",
+    "eslint-config-airbnb-base": "^11.3.2",
+    "eslint-config-recommended": "^2.0.0",
+    "eslint-import-resolver-webpack": "^0.8.3",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-react": "^7.4.0",
+    "extract-text-webpack-plugin": "^2.1.2",
+    "file-loader": "^0.11.2",
+    "imports-loader": "^0.7.1",
+    "jquery": "^3.2.1",
+    "less": "^2.7.2",
+    "less-loader": "^4.0.5",
+    "mocha": "^3.5.3",
+    "node-sass": "^4.5.3",
+    "popper.js": "^1.12.5",
+    "sass-loader": "^6.0.6",
+    "style-loader": "^0.18.2",
+    "url-loader": "^0.5.9",
+    "webpack": "^3.6.0"
+  },
+  "babel": {
+    "presets": [
+      "es2015",
+      "stage-2",
+      "react"
+    ],
+    "plugins": [
+      "transform-decorators-legacy"
+    ]
+  },
+  "prettier": {
+    "tabWidth": 2,
+    "singleQuote": true,
+    "trailingComma": "all",
+    "bracketSpacing": true,
+    "eslintIntegration": true,
+    "arrowParens": "always",
+    "printWidth": 100
+  },
+  "eslintConfig": {
+    "env": {
+      "node": true,
+      "browser": true,
+      "es6": true,
+      "mocha": true
+    },
+    "parser": "babel-eslint",
+    "parserOptions": {
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    },
+    "plugins": [
+      "react",
+      "import"
+    ],
+    "extends": [
+      "eslint:recommended",
+      "airbnb"
+    ],
+    "settings": {
+      "import/resolver": {
+        "node": {
+          "extensions": [
+            ".js",
+            ".jsx"
+          ],
+          "moduleDirectory": [
+            "node_modules",
+            "src"
+          ]
+        }
+      },
+      "import/extensions": "ignorePackages"
+    },
+    "rules": {
+      "jsx-a11y/href-no-hash": "off",
+      "react/jsx-filename-extension": [
+        1,
+        {
+          "extensions": [
+            ".js",
+            ".jsx"
+          ]
+        }
+      ],
+      "indent": [
+        "error",
+        2,
+        {
+          "SwitchCase": 1
+        }
+      ],
+      "linebreak-style": [
+        "error",
+        "unix"
+      ],
+      "quotes": [
+        "error",
+        "single"
+      ],
+      "semi": [
+        "error",
+        "always"
+      ],
+      "no-console": [
+        "warn",
+        {
+          "allow": [
+            "log",
+            "warn"
+          ]
+        }
+      ],
+      "no-unused-vars": [
+        "error",
+        {
+          "varsIgnorePattern": "[oO]ptions"
+        }
+      ],
+      "arrow-parens": [
+        "error",
+        "always"
+      ]
+    }
+  }
+}

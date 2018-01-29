@@ -19,11 +19,11 @@ const processSelectResultset = (resultset) => {
   result.data = resultset[0];
   result.meta.count = resultset[0].length;
   if (isDefinedAndNotNull(resultset[1])) {
-    result.meta.count = resultset[1][0];
-    if (isDefinedAndNotEmpty(resultset[1][1])) {
+    result.meta.count = resultset[1][0][0];
+    if (isDefinedAndNotEmpty(resultset[1][0][1])) {
       result.meta = {
-        errorCode: resultset[1][1],
-        errorMessage: resultset[1][2],
+        errorCode: resultset[1][0][1],
+        errorMessage: resultset[1][0][2],
       };
     }
   }

@@ -1,7 +1,7 @@
 const { isDefinedAndNotEmpty, isNumber } = require('check-tool');
 const utils = require('server/utils');
 const connector = require('server/db/connector');
-const db = require('server/db/Card');
+const dbCard = require('server/db/Card');
 const Card = require('server/bean/Card');
 
 /**
@@ -22,7 +22,7 @@ const create = async (req, res) => {
   const cvv = utils.generateCVV();
   const session = await connector.getSession();
 
-  db
+  dbCard
     .create(
       session,
       utils.generateCardNumber(),
@@ -63,7 +63,7 @@ const deposit = async (req, res) => {
 
   const session = await connector.getSession();
 
-  db
+  dbCard
     .deposit(session, number, amount)
     .then((result) => {
       session.close();
@@ -94,7 +94,7 @@ const balance = async (req, res) => {
 
   const session = await connector.getSession();
 
-  db
+  dbCard
     .getByNumberAndPin(session, number, utils.sha256(pin))
     .then((result) => {
       session.close();
@@ -123,7 +123,6 @@ module.exports = {
   create,
   deposit,
   balance,
-  transactions: notImplemented,
   authorize: notImplemented,
   capture: notImplemented,
   reverse: notImplemented,

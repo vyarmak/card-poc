@@ -14,7 +14,7 @@ BEGIN
   DECLARE errCode VARCHAR(255) DEFAULT '';
   DECLARE errMessage VARCHAR(255) DEFAULT '';
   
-  SELECT 
+  SELECT SQL_CALC_FOUND_ROWS 
     Transaction.idTransaction, 
     Transaction.idCard,
     Transaction.createdAt,

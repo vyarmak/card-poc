@@ -61,8 +61,6 @@ const deposit = (session, number, amount) => {
 const getByNumberAndPin = (session, number, pin) => {
   const rows = [];
 
-  console.log('pin', pin);
-
   return session
     .executeSql(
       'CALL `cards`.CardGetByNumberAndPin(?, ?)',

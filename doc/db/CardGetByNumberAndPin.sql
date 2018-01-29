@@ -17,7 +17,7 @@ BEGIN
   DECLARE errCode VARCHAR(255) DEFAULT '';
   DECLARE errMessage VARCHAR(255) DEFAULT '';
   
-  SELECT 
+  SELECT SQL_CALC_FOUND_ROWS 
     Card.idCard, 
     Card.status,
     Card.number,
@@ -32,7 +32,7 @@ BEGIN
   WHERE 
     Card.number = IN_number AND Card.pin = IN_pin;
 
-  SELECT totalRecords, errCode, errMessage;
+  SELECT FOUND_ROWS() AS totalRecords, errCode, errMessage;
 END
 //
 

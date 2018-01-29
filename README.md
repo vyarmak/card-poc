@@ -90,3 +90,7 @@ Sample result:
 }
 ```
 
+### Get Transaction 
+```
+curl -v -X POST http://localhost:3010/api/1.0/card/transactions -H "Content-Type: application/json" -d '{"number": "5442921958390009", "pin": "2931", "start": "2018-01-01", "end": "2018-02-02"}'
+```

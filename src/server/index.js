@@ -8,6 +8,7 @@ const config = require('server/config');
 const { error, info } = require('server/logger');
 
 const Card = require('server/api/Card');
+const Transaction = require('server/api/Transaction');
 // const Merchant = require('server/api/Merchant');
 const Category = require('server/api/Category');
 
@@ -44,7 +45,8 @@ app.post('/api/1.0/card', Card.create);
 app.post('/api/1.0/card/deposit', Card.deposit);
 // curl -v -X POST http://localhost:3010/api/1.0/card/balance -H "Content-Type: application/json" -d '{"number": "5247591626751671", "pin": "1234"}'
 app.post('/api/1.0/card/balance', Card.balance);
-// app.get('/api/1.0/card/transactions', Card.transactions);
+// curl -v -X POST http://localhost:3010/api/1.0/card/transactions -H "Content-Type: application/json" -d '{"number": "5247591626751671", "pin": "1234", "start": "2018-01-01", "end": "2018-02-02"}'
+app.post('/api/1.0/card/transactions', Transaction.getTransactionsByNumberAndPin);
 // app.post('/api/1.0/card/authorize', Card.authorize);
 // app.post('/api/1.0/card/capture', Card.capture);
 // app.post('/api/1.0/card/revers', Card.reverse);

@@ -72,7 +72,7 @@ yarn test
 
 # Manual testing
 
-Following CURL's can be used as for sample testing
+Following CURL's can be used as for manual testing
 
 ## Merchant registration operations
 ### List merchant categories

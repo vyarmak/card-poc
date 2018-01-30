@@ -67,3 +67,5 @@ server.listen(config.port, (err) => {
   const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`;
   info(`Listening on ${bind}`);
 });
+
+module.exports = app; // for testing

@@ -55,7 +55,10 @@ Where:
   - `count` - number of records in resultset
 - `data` - resultset data (array)
 
-# Testing
+# Automated testing
+
+To run automated tests please create a clean `cards_test` database (use `doc/db/create.database.test.sql` + SQL scripts located in `doc/db`)
+# Manual testing
 
 Following CURL's can be used as for sample testing
 
@@ -82,7 +85,7 @@ Where:
 
 Example:
 ```
-curl -v -X POST http://localhost:3010/api/1.0/card -H "Content-Type: application/json" -d '{"name": "James Bond"}'
+curl -v -X POST http://localhost:3010/api/1.0/card -H "Content-Type: application/json" -d '{"name": "John Doe"}'
 ```
 
 Sample response:
@@ -94,7 +97,7 @@ Sample response:
       "idCard": 1,
       "status": "",
       "number": "5331952051035583",
-      "name": "James Bond",
+      "name": "John Doe",
       "issuedDate": "2018-01-29",
       "expiryDate": "2023-01-29",
       "cvv": null,
@@ -126,7 +129,7 @@ Sample response:
   "data": [
     {
       "number": "5331952051035583",
-      "name": "James Bond",
+      "name": "John Doe",
       "issuedDate": "2018-01-29",
       "expiryDate": "2023-01-29",
       "balance": "1000.10",
@@ -152,7 +155,7 @@ Sample response:
   "data": [
     {
       "number": "5331952051035583",
-      "name": "James Bond",
+      "name": "John Doe",
       "issuedDate": "2018-01-29",
       "expiryDate": "2023-01-29",
       "balance": "1000.10",
@@ -189,7 +192,7 @@ To authorize merchant must provide following information:
 - `amount` - authorization amount
 
 ```
-curl -v -X POST http://localhost:3010/api/1.0/transaction/authorize -H "Content-Type: application/json" -d '{"number": "5247591626751671", "name": "James Bond", "expiryDate": "2023-01-29", "cvv": "225", "pin": "1234", "idMerchant": 1, "amount": 22.22}'
+curl -v -X POST http://localhost:3010/api/1.0/transaction/authorize -H "Content-Type: application/json" -d '{"number": "5546062490671062", "name": "John Doe", "expiryDate": "2023-01-29", "cvv": "619", "pin": "0962", "idMerchant": 1, "amount": 22.22}'
 ```
 
 ### Capture transaction

@@ -102,6 +102,10 @@ const balance = async (req, res) => {
       const resultObject = utils.getResultObject();
       resultObject.data = [Card.fromRow(data).forClient()];
       resultObject.meta = result.meta;
+      if (!isDefinedAndNotEmpty(resultObject.data[0].number)) {
+        utils.returnJson(res, utils.getResultObjectError('InvalidCard', 'Invalid card data'));
+        return;
+      }
       utils.returnJson(res, resultObject);
     })
     .catch((error) => {

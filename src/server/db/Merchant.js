@@ -1,13 +1,14 @@
 const connector = require('./connector');
 const { getResultObject } = require('server/utils');
 const logger = require('server/logger');
+const config = require('server/config');
 
 const create = (session, idCategory, name) => {
   const rows = [];
 
   return session
     .executeSql(
-      'CALL `cards`.MerchantCreate(?, ?)',
+      `CALL ${config.dbConfig.database}.MerchantCreate(?, ?)`,
       idCategory,
       name,
     )

@@ -21,7 +21,7 @@ BEGIN
     Card.name,
     Card.issuedDate,
     Card.expiryDate,
-    NULL AS cvv,
+    Card.cvv,
     NULL AS pin,
     Card.balance,
     Card.balanceBlocked

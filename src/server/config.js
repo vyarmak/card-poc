@@ -42,6 +42,10 @@ config.dbConfig = {
   password: 'cards',
   database: 'cards',
 };
+/** set test database */
+if (process.env.NODE_ENV === 'test') {
+  config.dbConfig.database = 'cards_test';
+}
 
 if (process.env.DB_CONFIG) {
   try {

@@ -1,13 +1,14 @@
 const connector = require('./connector');
 const { getResultObject, toMySQLDate } = require('server/utils');
 const logger = require('server/logger');
+const config = require('server/config');
 
 const create = (session, number, name, issuedDate, expiryDate, cvv, encodedPin) => {
   const rows = [];
 
   return session
     .executeSql(
-      'CALL `cards`.CardCreate(?, ?, ?, ?, ?, ?)',
+      `CALL ${config.dbConfig.database}.CardCreate(?, ?, ?, ?, ?, ?)`,
       number,
       name,
       toMySQLDate(issuedDate),
@@ -37,7 +38,7 @@ const deposit = (session, number, amount) => {
 
   return session
     .executeSql(
-      'CALL `cards`.CardDeposit(?, ?)',
+      `CALL ${config.dbConfig.database}.CardDeposit(?, ?)`,
       `${number}`,
       `${amount}`,
     )
@@ -63,7 +64,7 @@ const getByNumberAndPin = (session, number, pin) => {
 
   return session
     .executeSql(
-      'CALL `cards`.CardGetByNumberAndPin(?, ?)',
+      `CALL ${config.dbConfig.database}.CardGetByNumberAndPin(?, ?)`,
       number,
       pin,
     )
@@ -89,7 +90,7 @@ const validate = (session, number, name, expiryDate, cvv, pin) => {
 
   return session
     .executeSql(
-      'CALL `cards`.CardValidate(?, ?, ?, ?, ?)',
+      `CALL ${config.dbConfig.database}.CardValidate(?, ?, ?, ?, ?)`,
       number,
       name,
       expiryDate,

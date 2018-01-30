@@ -32,6 +32,12 @@ BEGIN
   WHERE 
     Card.number = IN_number AND Card.pin = IN_pin;
 
+  SELECT FOUND_ROWS() INTO totalRecords;
+
+  IF (totalRecords = 0) THEN
+    CALL CardGetEmpty();
+  END IF;
+
   SELECT FOUND_ROWS() AS totalRecords, errCode, errMessage;
 END
 //

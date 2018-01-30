@@ -76,7 +76,7 @@ const authorize = (session, idCard, idMerchant, amount) => {
 
   return session
     .executeSql(
-      'CALL `cards`.TransactionAuthorize(?, ?, ?)',
+      `CALL ${config.dbConfig.database}.TransactionAuthorize(?, ?, ?)`,
       idCard,
       idMerchant,
       `${amount}`,
@@ -103,7 +103,7 @@ const capture = (session, idTransaction, idMerchant, amount) => {
 
   return session
     .executeSql(
-      'CALL `cards`.TransactionCapture(?, ?, ?)',
+      `CALL ${config.dbConfig.database}.TransactionCapture(?, ?, ?)`,
       idTransaction,
       idMerchant,
       `${amount}`,
@@ -130,7 +130,7 @@ const reverse = (session, idTransaction, idMerchant, amount) => {
 
   return session
     .executeSql(
-      'CALL `cards`.TransactionReverse(?, ?, ?)',
+      `CALL ${config.dbConfig.database}.TransactionReverse(?, ?, ?)`,
       idTransaction,
       idMerchant,
       `${amount}`,
@@ -157,7 +157,7 @@ const refund = (session, idTransaction, idMerchant, amount) => {
 
   return session
     .executeSql(
-      'CALL `cards`.TransactionRefund(?, ?, ?)',
+      `CALL ${config.dbConfig.database}.TransactionRefund(?, ?, ?)`,
       idTransaction,
       idMerchant,
       `${amount}`,

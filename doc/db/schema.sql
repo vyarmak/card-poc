@@ -1,14 +1,14 @@
 SET FOREIGN_KEY_CHECKS=0;
 
-DROP TABLE IF EXISTS `cards`.`Category`;
-CREATE TABLE IF NOT EXISTS `cards`.`Category` (
+DROP TABLE IF EXISTS `Category`;
+CREATE TABLE IF NOT EXISTS `Category` (
   `idCategory` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(64) NOT NULL,
   PRIMARY KEY (`idCategory`))
 ENGINE = InnoDB;
 
-DROP TABLE IF EXISTS `cards`.`Merchant`;
-CREATE TABLE IF NOT EXISTS `cards`.`Merchant` (
+DROP TABLE IF EXISTS `Merchant`;
+CREATE TABLE IF NOT EXISTS `Merchant` (
   `idMerchant` INT NOT NULL AUTO_INCREMENT,
   `idCategory` INT NOT NULL,
   `name` VARCHAR(64) NOT NULL,
@@ -16,13 +16,13 @@ CREATE TABLE IF NOT EXISTS `cards`.`Merchant` (
   INDEX `fk_Merchant_Category_idx` (`idCategory` ASC),
   CONSTRAINT `fk_Merchant_Category`
     FOREIGN KEY (`idCategory`)
-    REFERENCES `cards`.`Category` (`idCategory`)
+    REFERENCES `Category` (`idCategory`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-DROP TABLE IF EXISTS `cards`.`Card`;
-CREATE TABLE IF NOT EXISTS `cards`.`Card` (
+DROP TABLE IF EXISTS `Card`;
+CREATE TABLE IF NOT EXISTS `Card` (
   `idCard` INT NOT NULL AUTO_INCREMENT,
   `status` CHAR(1) NOT NULL DEFAULT ' ' COMMENT 'B - Blocked',
   `number` CHAR(16) NOT NULL,
@@ -36,8 +36,8 @@ CREATE TABLE IF NOT EXISTS `cards`.`Card` (
   PRIMARY KEY (`idCard`))
 ENGINE = InnoDB;
 
-DROP TABLE IF EXISTS `cards`.`Transaction`;
-CREATE TABLE IF NOT EXISTS `cards`.`Transaction` (
+DROP TABLE IF EXISTS `Transaction`;
+CREATE TABLE IF NOT EXISTS `Transaction` (
   `idTransaction` INT NOT NULL AUTO_INCREMENT,
   `idCard` INT NOT NULL,
   `createdAt` DATETIME NOT NULL,
@@ -50,18 +50,18 @@ CREATE TABLE IF NOT EXISTS `cards`.`Transaction` (
   INDEX `fk_Transaction_Marchant_idx` (`idMerchant` ASC),
   CONSTRAINT `fk_Transaction_Card`
     FOREIGN KEY (`idCard`)
-    REFERENCES `cards`.`Card` (`idCard`)
+    REFERENCES `Card` (`idCard`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Transaction_Marchant`
     FOREIGN KEY (`idMerchant`)
-    REFERENCES `cards`.`Merchant` (`idMerchant`)
+    REFERENCES `Merchant` (`idMerchant`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-DROP TABLE IF EXISTS `cards`.`TransactionLedger`;
-CREATE TABLE IF NOT EXISTS `cards`.`TransactionLedger` (
+DROP TABLE IF EXISTS `TransactionLedger`;
+CREATE TABLE IF NOT EXISTS `TransactionLedger` (
   `idTransactionLedger` INT NOT NULL AUTO_INCREMENT,
   `idTransaction` INT NOT NULL,
   `createdAt` DATETIME NOT NULL,
@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS `cards`.`TransactionLedger` (
   INDEX `fk_TransactionLedger_Transaction_idx` (`idTransaction` ASC),
   CONSTRAINT `fk_TransactionLedger_Transaction`
     FOREIGN KEY (`idTransaction`)
-    REFERENCES `cards`.`Transaction` (`idTransaction`)
+    REFERENCES `Transaction` (`idTransaction`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

@@ -39,7 +39,13 @@ BEGIN
     AND Card.cvv = IN_cvv
     AND Card.pin = IN_pin;
 
-  SELECT FOUND_ROWS() AS totalRecords, errCode, errMessage;
+  SELECT FOUND_ROWS() INTO totalRecords;
+
+  IF (totalRecords = 0) THEN
+    CALL CardGetEmpty();
+  END IF;
+
+  SELECT totalRecords, errCode, errMessage;
 END
 //
 

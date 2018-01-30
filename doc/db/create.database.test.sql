@@ -1,0 +1,5 @@
+DROP DATABASE IF EXISTS cards_test;
+CREATE DATABASE cards_test;
+
+GRANT ALL PRIVILEGES ON cards_test.* TO cards@localhost IDENTIFIED BY 'cards';
+FLUSH PRIVILEGES;

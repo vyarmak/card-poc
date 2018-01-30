@@ -5,11 +5,17 @@ Credit Card POC
 
 Use `yarn install` to install all necessary packages.
 
+You can also use `npm` instead of `yarn`.
+
 ## Requirements
 
-MySQL version 5.7.12+
+Latest stable:
+- node (8.9.4+)
+- yarn (1.3.2+) or npm (5.6.0+)
 
-Please ensure that mysql is installed with X Protocol option enabled. If not sure - instructions to verify enabled plugins can be found [here](https://dev.mysql.com/doc/refman/5.7/en/obtaining-plugin-information.html) and instructions enable X Protocol can be found [here](https://dev.mysql.com/doc/refman/5.7/en/document-store-setting-up.html)
+MySQL version **5.7.12+**
+
+**IMPORTANT** Please ensure that mysql is installed with X Protocol option enabled. If not sure - instructions to verify enabled plugins can be found [here](https://dev.mysql.com/doc/refman/5.7/en/obtaining-plugin-information.html) and instructions enable X Protocol can be found [here](https://dev.mysql.com/doc/refman/5.7/en/document-store-setting-up.html)
 
 ## DB creation
 
@@ -58,6 +64,12 @@ Where:
 # Automated testing
 
 To run automated tests please create a clean `cards_test` database (use `doc/db/create.database.test.sql` + SQL scripts located in `doc/db`)
+
+After this you can run end-to-end testing by: 
+```
+yarn test
+```
+
 # Manual testing
 
 Following CURL's can be used as for sample testing
